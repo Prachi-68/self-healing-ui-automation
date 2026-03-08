@@ -1,0 +1,26 @@
+{
+  "login_page": {
+    "username_input": "#username",
+    "password_input": "#password",
+    "login_button": "button[type='submit']"
+  },
+
+  "checkbox_page": {
+    "checkbox1": "input[type='checkbox']:nth-of-type(1)",
+    "checkbox2": "input[type='checkbox']:nth-of-type(2)"
+  },
+
+  "dropdown_page": {
+    "dropdown": "#dropdown"
+  },
+
+  "add_remove_page": {
+    "add_button": "text=Add Element",
+    "delete_button": "text=Delete"
+  },
+
+  "upload_page": {
+    "upload_input": "#file-upload",
+    "upload_button": "#file-submit"
+  }
+}

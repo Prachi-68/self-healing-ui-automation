@@ -1,0 +1,69 @@
+Login Automation:
+
+website: https://the-internet.herokuapp.com/login
+locator: 
+{
+  "username_input": "#username",
+  "password_input": "#password",
+  "login_button": "button[type='submit']"
+}
+
+for healing:
+    "login_button": "button[type='submit77']"
+
+*****************************************************************************
+
+Checkbox Automation:
+
+website: https://the-internet.herokuapp.com/checkboxes
+locator: 
+{
+  "checkbox1": "input[type='checkbox']:nth-of-type(1)",
+  "checkbox2": "input[type='checkbox']:nth-of-type(2)"
+}
+
+for healing:
+    "checkbox1": "input[type='checkbox123']:nth-of-type(1)"
+    "checkbox1": "#checkbox-1"
+
+*****************************************************************************
+
+Dropdown Automation:
+
+website: https://the-internet.herokuapp.com/dropdown
+locator: 
+{
+  "dropdown": "#dropdown",
+  "option1": "text=Option 1"
+}
+
+for healing:
+    "dropdown": "#dropdown123"
+
+*****************************************************************************
+
+Add/Remove Elements:
+
+website: https://the-internet.herokuapp.com/add_remove_elements/
+locator: 
+{
+  "add_button": "text=Add Element",
+  "delete_button": "text=Delete"
+}
+
+for healing:
+    "add_button": "text=Add Element123"
+
+*****************************************************************************
+
+File Upload:
+
+website: https://the-internet.herokuapp.com/upload
+locator:
+{
+  "upload_input": "#file-upload",
+  "upload_button": "#file-submit"
+}
+
+for healing:
+    "upload_button": "#file-submit123"
