@@ -1,69 +1,344 @@
-Login Automation:
+================================================================================
+  SELF-HEALING UI AUTOMATION — Demo Website Locator Reference
+  13 Scenarios | Normal + Broken Locators for Every Scenario
+================================================================================
+
+Each block shows:
+  • Website URL
+  • Normal (working) locators
+  • Broken locators used to trigger each healing strategy
+  • Which healing strategy (S1-S12) is expected to recover the element
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 01 — LOGIN
+════════════════════════════════════════════════════════════════════════════════
 
 website: https://the-internet.herokuapp.com/login
-locator: 
+
+Normal locators:
 {
   "username_input": "#username",
   "password_input": "#password",
-  "login_button": "button[type='submit']"
+  "login_button":   "button[type='submit']"
 }
 
-for healing:
-    "login_button": "button[type='submit77']"
+Broken locators for healing demo:
+  "login_button":   "button[type='submit999']"          ← triggers S4 (Role-Based)
+  "username_input": "#username_BROKEN"                  ← triggers S7 (ID/Name)
+  "password_input": "input[type='password_BROKEN']"     ← triggers S9 (CSS combo)
 
-*****************************************************************************
+Expected healing path:
+  login_button   → S4 get_by_role('button', name='Login')
+  username_input → S7 #username  /  S5 get_by_label('Username')
+  password_input → S9 input[type='password']
 
-Checkbox Automation:
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 02 — CHECKBOXES
+════════════════════════════════════════════════════════════════════════════════
 
 website: https://the-internet.herokuapp.com/checkboxes
-locator: 
+
+Normal locators:
 {
   "checkbox1": "input[type='checkbox']:nth-of-type(1)",
   "checkbox2": "input[type='checkbox']:nth-of-type(2)"
 }
 
-for healing:
-    "checkbox1": "input[type='checkbox123']:nth-of-type(1)"
-    "checkbox1": "#checkbox-1"
+Broken locators for healing demo:
+  "checkbox1": "input[type='checkbox123']:nth-of-type(1)"  ← triggers S4 (checkbox role)
+  "checkbox2": "#checkbox-2-broken"                        ← triggers S9 (CSS combo)
 
-*****************************************************************************
+Expected healing path:
+  checkbox1 → S4 get_by_role('checkbox')   [first checkbox]
+  checkbox2 → S9 input[type='checkbox']    [second via CSS]
 
-Dropdown Automation:
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 03 — DROPDOWN
+════════════════════════════════════════════════════════════════════════════════
 
 website: https://the-internet.herokuapp.com/dropdown
-locator: 
+
+Normal locators:
 {
   "dropdown": "#dropdown",
-  "option1": "text=Option 1"
+  "option1":  "option[value='1']",
+  "option2":  "option[value='2']"
 }
 
-for healing:
-    "dropdown": "#dropdown123"
+Broken locators for healing demo:
+  "dropdown": "#dropdown_BROKEN_999"      ← triggers S7 (ID/name: #dropdown)
+  "option1":  "option[value='999']"       ← triggers S11 XPath (//select/option)
 
-*****************************************************************************
+Expected healing path:
+  dropdown → S7  #dropdown  (ID slug match)
+  option1  → S11 //select[1]  then select_option(index=0)
 
-Add/Remove Elements:
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 04 — ADD / REMOVE ELEMENTS
+════════════════════════════════════════════════════════════════════════════════
 
 website: https://the-internet.herokuapp.com/add_remove_elements/
-locator: 
+
+Normal locators:
 {
-  "add_button": "text=Add Element",
+  "add_button":    "text=Add Element",
   "delete_button": "text=Delete"
 }
 
-for healing:
-    "add_button": "text=Add Element123"
+Broken locators for healing demo:
+  "add_button":    "text=Add Element BROKEN"    ← triggers S6 (visible text)
+  "delete_button": "text=Delete BROKEN"         ← triggers S8 (type+partial text)
 
-*****************************************************************************
+Expected healing path:
+  add_button    → S6 get_by_text('Add', exact=False)
+  delete_button → S8 //button[contains(.,'Delete')]
 
-File Upload:
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 05 — FILE UPLOAD
+════════════════════════════════════════════════════════════════════════════════
 
 website: https://the-internet.herokuapp.com/upload
-locator:
+
+Normal locators:
 {
-  "upload_input": "#file-upload",
+  "upload_input":  "#file-upload",
   "upload_button": "#file-submit"
 }
 
-for healing:
-    "upload_button": "#file-submit123"
+Broken locators for healing demo:
+  "upload_button": "#file-submit-BROKEN"     ← triggers S9 (CSS: button[type='submit'])
+  "upload_input":  "#file-upload-BROKEN"     ← triggers S9 (CSS: input[type='file'])
+
+Expected healing path:
+  upload_button → S9 button[type='submit']  /  form button
+  upload_input  → S9 input[type='file']
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 06 — DRAG AND DROP
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/drag_and_drop
+
+Normal locators:
+{
+  "drag_source": "#column-a",
+  "drag_target": "#column-b"
+}
+
+Broken locators for healing demo:
+  "drag_source": "#column-a-BROKEN"     ← triggers S9 ([draggable='true'])
+  "drag_target": "#column-b-BROKEN"     ← triggers S11 XPath (//*[@draggable][2])
+
+Expected healing path:
+  drag_source → S9  [draggable='true']:first
+  drag_target → S11 //*[@draggable='true'][2]
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 07 — HOVER / TOOLTIP
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/hovers
+
+Normal locators:
+{
+  "hover_trigger": ".example li:nth-of-type(1) img",
+  "hover_menu":    ".example li:nth-of-type(1) ul"
+}
+
+Broken locators for healing demo:
+  "hover_trigger": ".example li:nth-of-type(1) img.BROKEN"    ← triggers S9 CSS
+  "hover_menu":    ".example .BROKEN_UL"                       ← triggers S11 XPath
+
+Expected healing path:
+  hover_trigger → S9  .example img  /  S11 //div[@class='example']//img[1]
+  hover_menu    → S11 //div[@class='example']//ul[1]
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 08 — IFRAMES
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/iframe
+
+Normal locators:
+{
+  "editor_frame": "iframe#mce_0_ifr",
+  "editor_body":  "body#tinymce"
+}
+
+Broken locators for healing demo:
+  "editor_frame": "iframe#mce_BROKEN_ifr"     ← triggers S9 CSS (iframe)
+  "editor_body":  "body#tinymce_BROKEN"        ← triggers S11 XPath (//body)
+
+Expected healing path:
+  editor_frame → S9  iframe  (first iframe on page)
+  editor_body  → S12 iframe body  (scoped inside container)
+
+Note: Playwright's frame_locator is used for iframe interaction;
+      healing falls back to generic "iframe" CSS selector.
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 09 — DATA TABLES
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/tables
+
+Normal locators:
+{
+  "table_header":   "table#table1 thead th:nth-of-type(1)",
+  "first_row_name": "table#table1 tbody tr:nth-of-type(1) td:nth-of-type(1)",
+  "sort_by_last":   "table#table1 thead th:nth-of-type(2) span"
+}
+
+Broken locators for healing demo:
+  "sort_by_last":   "table#table1 thead .BROKEN_SORT"    ← triggers S11 XPath
+  "table_header":   "#table1 .BROKEN_TH"                 ← triggers S12 anchor
+
+Expected healing path:
+  sort_by_last  → S11 //table[@id='table1']//thead//th[2]
+  table_header  → S12 table th:first-of-type
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 10 — KEY PRESSES
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/key_presses
+
+Normal locators:
+{
+  "key_input":   "#target",
+  "result_text": "#result"
+}
+
+Broken locators for healing demo:
+  "key_input":   "#target_BROKEN"    ← triggers S5 (label) / S7 (id: #target)
+  "result_text": "#result_BROKEN"    ← triggers S7 (id: #result)
+
+Expected healing path:
+  key_input   → S7 #target  (ID slug match removes _BROKEN suffix fallback)
+              → S9 input[type='text']  (CSS combo fallback)
+  result_text → S7 #result
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 11 — INFINITE SCROLL
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/infinite_scroll
+
+Normal locators:
+{
+  "scroll_area":   ".jscroll-inner",
+  "loaded_content": ".jscroll-added p"
+}
+
+Broken locators for healing demo:
+  "scroll_area":    ".jscroll-inner-BROKEN"    ← triggers S9 (div / section CSS)
+  "loaded_content": ".jscroll-added-BROKEN p"  ← triggers S12 (main p)
+
+Expected healing path:
+  scroll_area    → S9  .container  /  main  (outer wrapper)
+  loaded_content → S12 main p  /  section p
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 12 — VIDEO PLAYER  (HTML5 <video>)
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://www.w3schools.com/html/html5_video.asp
+         (or any page with an HTML5 <video> element)
+
+Normal locators:
+{
+  "video_player":      "video",
+  "video_play_button": "video"
+}
+
+Broken locators for healing demo:
+  "video_player":      "video#BROKEN_VIDEO_ID"    ← triggers S9 (video CSS tag)
+  "video_play_button": "#play-BROKEN"              ← triggers S11 XPath (//video)
+
+Expected healing path:
+  video_player      → S9  video  (CSS tag: video)
+  video_play_button → S11 //video[1]
+
+Post-heal action:
+  page.evaluate("document.querySelector('video').play()")
+  page.evaluate("document.querySelector('video').pause()")
+
+Additional media element locators (for future scenarios):
+{
+  "audio_player":      "audio",                   ← HTML5 <audio>
+  "audio_play_button": "audio[controls]"
+
+  "canvas_element":    "canvas",                  ← HTML5 <canvas>
+  "canvas_area":       "#canvas"
+
+  "svg_element":       "svg",                     ← SVG visual
+  "svg_circle":        "svg circle"
+}
+
+Broken versions for healing:
+  "audio_player":      "audio#BROKEN"    → S9 audio / S11 //audio[1]
+  "canvas_element":    "#canvas-BROKEN"  → S9 canvas / S11 //canvas[1]
+  "svg_element":       "svg#BROKEN"      → S9 svg    / S11 //svg[1]
+
+
+════════════════════════════════════════════════════════════════════════════════
+SCENARIO 13 — GEOLOCATION
+════════════════════════════════════════════════════════════════════════════════
+
+website: https://the-internet.herokuapp.com/geolocation
+
+Normal locators:
+{
+  "where_am_i_button": "button[onclick*='getLocation'], .example button",
+  "lat_result":        "#lat-value",
+  "long_result":       "#long-value"
+}
+
+Broken locators for healing demo:
+  "where_am_i_button": "button#BROKEN_WHERE_AM_I"   ← triggers S6 (text: 'Where Am I')
+  "lat_result":        "#lat-value-BROKEN"           ← triggers S7 (ID: #lat-value)
+  "long_result":       "#long-value-BROKEN"          ← triggers S7 (ID: #long-value)
+
+Expected healing path:
+  where_am_i_button → S6 get_by_text('Where Am I', exact=False)
+                    → S4 get_by_role('button', name='Where Am I')
+  lat_result        → S7 #lat-value
+  long_result       → S7 #long-value
+
+Browser context setup required:
+  context.set_geolocation({"latitude": 25.3176, "longitude": 82.9739})
+  context.grant_permissions(["geolocation"])
+
+
+════════════════════════════════════════════════════════════════════════════════
+  QUICK HEALING STRATEGY REFERENCE
+════════════════════════════════════════════════════════════════════════════════
+
+  S1  — Stored / Previously Healed Locators     (locator_store.json)
+  S2  — data-testid / data-automation attrs
+  S3  — ARIA attributes (aria-label, aria-labelledby)
+  S4  — Role-based locators (get_by_role)
+  S5  — Accessibility label / <label> text (get_by_label)
+  S6  — Visible text locators (get_by_text / text=)
+  S7  — ID or name attributes
+  S8  — Element type + partial text (XPath contains)
+  S9  — Composite CSS selectors (tag + class + attr)
+  S10 — Neighbour / relative locators
+  S11 — XPath with hierarchical heuristics
+  S12 — Anchor to stable container context
+  S13 — AI Healer (OpenAI GPT-4o) — last resort
+
+================================================================================
+  End of Demo Reference
+================================================================================

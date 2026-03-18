@@ -2,7 +2,7 @@
   "login_page": {
     "username_input": "#username",
     "password_input": "#password",
-    "login_button": "button[type='submit']"
+    "login_button":   "button[type='submit']"
   },
 
   "checkbox_page": {
@@ -11,16 +11,62 @@
   },
 
   "dropdown_page": {
-    "dropdown": "#dropdown"
+    "dropdown": "#dropdown",
+    "option1":  "option[value='1']",
+    "option2":  "option[value='2']"
   },
 
   "add_remove_page": {
-    "add_button": "text=Add Element",
+    "add_button":    "text=Add Element",
     "delete_button": "text=Delete"
   },
 
   "upload_page": {
-    "upload_input": "#file-upload",
+    "upload_input":  "#file-upload",
     "upload_button": "#file-submit"
+  },
+
+  "drag_drop_page": {
+    "drag_source": "#column-a",
+    "drag_target": "#column-b"
+  },
+
+  "hover_page": {
+    "hover_trigger": ".example li:nth-of-type(1) img",
+    "hover_menu":    ".example li:nth-of-type(1) ul"
+  },
+
+  "frames_page": {
+    "frame_button": "#content iframe"
+  },
+
+  "dynamic_content_page": {
+    "reload_link": "a[href='/dynamic_content']"
+  },
+
+  "tables_page": {
+    "table_header":   "table#table1 thead th:nth-of-type(1)",
+    "first_row_name": "table#table1 tbody tr:nth-of-type(1) td:nth-of-type(1)",
+    "sort_by_last":   "table#table1 thead th:nth-of-type(2) span"
+  },
+
+  "key_press_page": {
+    "key_input":  "#target",
+    "result_text": "#result"
+  },
+
+  "infinite_scroll_page": {
+    "scroll_area": ".jscroll-inner"
+  },
+
+  "video_page": {
+    "video_player":     "video",
+    "video_play_button": "video"
+  },
+
+  "geolocation_page": {
+    "where_am_i_button": "button[onclick*='getLocation'], .example button",
+    "lat_result":        "#lat-value",
+    "long_result":       "#long-value"
   }
 }
